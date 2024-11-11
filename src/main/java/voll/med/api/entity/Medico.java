@@ -6,6 +6,7 @@ import lombok.*;
 @Entity(name = "medico")
 @Table(name = "medicos")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -19,6 +20,7 @@ public class Medico {
     private String telefone;
     private String email;
     private String crm;
+    private String slug;
 
     @Enumerated(EnumType.STRING)
     private Especialidade especialidade;

@@ -1,7 +1,6 @@
 package voll.med.api.controller;
 
-import lombok.Getter;
-import org.apache.coyote.Response;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import voll.med.api.service.MedicoService;
 
 @RestController
 @RequestMapping("/medicos")
+@CrossOrigin(origins = "*")
 public class MedicoController {
 
     @Autowired
@@ -35,4 +35,33 @@ public class MedicoController {
         }
     }
 
+    @GetMapping("/{slug}")
+    public ResponseEntity<?> getMedicoPorSlug(@PathVariable String slug) {
+        try {
+            Medico medico = medicoService.getMedicoPorSlug(slug);
+            return ResponseEntity.ok(medico);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/deletar/{slug}")
+    public ResponseEntity<?> deleteMedico(@PathVariable String slug) {
+        try {
+            Medico medico = medicoService.deleteMedico(slug);
+            return ResponseEntity.ok("Médico excluído com sucesso.");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/editar/{slug}")
+    public ResponseEntity<?> editarMedico(@PathVariable String slug, @RequestBody Medico medico) {
+        try {
+            Medico medicoEditar = medicoService.editMedicoBySlug(slug, medico);
+            return ResponseEntity.ok(medicoEditar);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }
