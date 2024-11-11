@@ -3,6 +3,8 @@ package voll.med.api.service;
 import com.github.slugify.Slugify;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import voll.med.api.entity.Medico;
 import voll.med.api.repository.MedicoRepository;
@@ -24,8 +26,8 @@ public class MedicoService {
         return medicoRepository.save(medico);
     }
 
-    public List<Medico> getAllMedicos() {
-        return medicoRepository.findAll();
+    public Page<Medico> getAllMedicos(Pageable pageable) {
+        return medicoRepository.findAll(pageable);
     }
 
     public Medico editMedicoBySlug(String slug, Medico medico) {

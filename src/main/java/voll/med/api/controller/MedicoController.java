@@ -2,6 +2,8 @@ package voll.med.api.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +29,9 @@ public class MedicoController {
     }
 
     @GetMapping
-    public ResponseEntity<?> listarMedicos() {
+    public ResponseEntity<?> listarMedicos(@PageableDefault(size = 10, sort = {"nome"}) Pageable pageable) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(medicoService.getAllMedicos());
+            return ResponseEntity.status(HttpStatus.OK).body(medicoService.getAllMedicos(pageable));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
