@@ -31,7 +31,22 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/logout").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/medicos").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/medicos/{slug}").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/medicos").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/medicos/editar/{slug}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/medicos/deletar/{slug}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/pacientes").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/pacientes/{slug}").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/pacientes").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/pacientes/editar/{slug}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/pacientes/deletar/{slug}").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .logout((logout) -> logout
+                        .logoutSuccessUrl("/auth/logout")
+                        .permitAll()
                 )
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();

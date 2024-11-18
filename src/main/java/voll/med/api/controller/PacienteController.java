@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import voll.med.api.entity.Paciente;
 import voll.med.api.service.PacienteService;
@@ -57,6 +58,7 @@ public class PacienteController {
     }
 
     @DeleteMapping("/deletar/{slug}")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<?> deletarPaciente(@PathVariable String slug) {
         try {
             Paciente pacienteDeletado = pacienteService.deletePaciente(slug);

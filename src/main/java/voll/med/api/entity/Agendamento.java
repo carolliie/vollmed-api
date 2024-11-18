@@ -1,9 +1,9 @@
-/*package voll.med.api.entity;
+package voll.med.api.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity(name = "agendamento")
 @Table(name = "agendamentos")
@@ -18,12 +18,16 @@ public class Agendamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "paciente_id")
     private Paciente paciente;
 
-    @Embedded
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medico_id")
     private Medico medico;
 
-    private Date data;
+    private LocalDateTime data;
 
-}*/
+    private String dataSlug;
+
+}
