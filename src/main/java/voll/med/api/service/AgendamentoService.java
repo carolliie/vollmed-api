@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import voll.med.api.entity.Agendamento;
 import voll.med.api.entity.DadosAgendamentoConsulta;
-import voll.med.api.entity.Medico;
 import voll.med.api.repository.AgendamentoRepository;
 import voll.med.api.repository.MedicoRepository;
 import voll.med.api.repository.PacienteRepository;
@@ -29,7 +28,7 @@ public class AgendamentoService {
     @Autowired
     private AgendamentoRepository agendamentoRepository;
 
-    public void salvarAgendamento(DadosAgendamentoConsulta dados) {
+    public Agendamento salvarAgendamento(DadosAgendamentoConsulta dados) {
 
         if (!pacienteRepository.existsById(dados.idPaciente())) {
             throw new EntityNotFoundException("Paciente informado não existe!");
@@ -42,9 +41,8 @@ public class AgendamentoService {
         var paciente = pacienteRepository.getReferenceById(dados.idPaciente());
         var medico = medicoRepository.getReferenceById(dados.idMedico());
 
-        /*String dataAgendamentoSlug = slugify.slugify(String.valueOf(dados.getData()));
-        agendamento.setDataSlug(dataAgendamentoSlug);
-        return agendamentoRepository.save(agendamento);*/
+        var agendamento = new Agendamento(null, paciente, medico, dados.data());
+        return agendamentoRepository.save(agendamento);
     }
 
     public Page<Agendamento> getAllAgendamentos(Pageable pageable) {

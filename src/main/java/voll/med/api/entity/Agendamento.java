@@ -1,6 +1,8 @@
 package voll.med.api.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -30,4 +32,6 @@ public class Agendamento {
 
     private String dataSlug;
 
+    public Agendamento(Long id, Paciente paciente, Medico medico, @NotNull @Future LocalDateTime data) {
+    }
 }
