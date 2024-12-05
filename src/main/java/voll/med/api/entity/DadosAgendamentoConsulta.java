@@ -16,4 +16,6 @@ public record DadosAgendamentoConsulta(
         @Future
         LocalDateTime data,
 
-        String dataSlug) {}
+        String dataSlug,
+
+        Especialidade especialidade) {}

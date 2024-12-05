@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import voll.med.api.entity.Agendamento;
 import voll.med.api.entity.DadosAgendamentoConsulta;
+import voll.med.api.entity.Medico;
 import voll.med.api.repository.AgendamentoRepository;
 import voll.med.api.repository.MedicoRepository;
 import voll.med.api.repository.PacienteRepository;
@@ -34,12 +35,12 @@ public class AgendamentoService {
             throw new EntityNotFoundException("Paciente informado não existe!");
         }
 
-        if (!medicoRepository.existsById(dados.idMedico())) {
+        if (dados.idMedico() != null && !medicoRepository.existsById(dados.idMedico())) {
             throw new EntityNotFoundException("Médico informado não existe!");
         }
 
         var paciente = pacienteRepository.getReferenceById(dados.idPaciente());
-        var medico = medicoRepository.getReferenceById(dados.idMedico());
+        var medico = escolherMedico(dados);
 
         var agendamento = new Agendamento(null, paciente, medico, dados.data());
         return agendamentoRepository.save(agendamento);
@@ -95,5 +96,17 @@ public class AgendamentoService {
         } else {
             throw new EntityNotFoundException("Agendamento não encontrado.");
         }
+    }
+
+    private Medico escolherMedico(DadosAgendamentoConsulta dados) {
+        if (dados.idMedico() != null) {
+            return medicoRepository.getReferenceById(dados.idMedico());
+        }
+
+        if (dados.especialidade() == null) {
+            throw new EntityNotFoundException("Especialidade é obrigatória.");
+        }
+
+        return medicoRepository.escolherMedicoEspecializadoDisponivel(dados.especialidade(), dados.data());
     }
 }

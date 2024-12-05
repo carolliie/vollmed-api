@@ -21,7 +21,7 @@ public class AgendamentoController {
     @Autowired
     private AgendamentoService agendamentoService;
 
-    /*@PostMapping
+    @PostMapping
     @Transactional
     public ResponseEntity agendarConsulta(@RequestBody @Valid DadosAgendamentoConsulta dadosAgendamento) {
         try {
@@ -32,7 +32,7 @@ public class AgendamentoController {
         }
     }
 
-    @GetMapping
+    /*@GetMapping
     public ResponseEntity<?> listarAgendamentos(@PageableDefault(size = 10, sort = {"data"}) Pageable pageable) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(agendamentoService.getAllAgendamentos(pageable));
